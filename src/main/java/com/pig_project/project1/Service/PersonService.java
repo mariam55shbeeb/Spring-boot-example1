@@ -3,6 +3,7 @@ package com.pig_project.project1.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
@@ -32,9 +33,26 @@ public class PersonService {
     	  
       }
 
-	public Person add(Person p) {
-		return person_operation.insert(p);
-	}
+	public String add(Person p) {
+		String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@" 
+			        + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
+		
+		int i;
+		boolean valid=true;
+		for(i=0;i<p.getEmail().size();i++) {
+
+		valid=patternMatches(p.getEmail().get(i),regexPattern);
+				if (valid == false) {
+					
+					return p.getEmail().get(i) + " please correct email format !!";
+				}
+		}
+				
+			person_operation.insert(p);
+			return "successfully added";
+			
+		}
+		
 
 	public List<Person> get_all_person() {
 		// TODO Auto-generated method stub
@@ -96,6 +114,11 @@ public class PersonService {
 		 return person;
 		 
 		
+	}
+	public static boolean patternMatches(String emailAddress, String regexPattern) {
+	    return Pattern.compile(regexPattern)
+	    		.matcher(emailAddress)
+	      .matches();
 	}
 	
 	  

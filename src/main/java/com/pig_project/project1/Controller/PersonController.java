@@ -33,7 +33,7 @@ public class PersonController {
     }
     
     @PostMapping("/Add")
-    Person RigesterNewPerson(@RequestBody Person p)
+    String RigesterNewPerson(@RequestBody Person p)
     {
     	return ps.add(p);
     }
